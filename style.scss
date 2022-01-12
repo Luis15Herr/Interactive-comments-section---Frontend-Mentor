@@ -1,0 +1,96 @@
+$Moderateblue: hsl(238, 40%, 52%);
+$SoftRed: hsl(358, 79%, 66%);
+$Lightgrayishblue: hsl(239, 57%, 85%);
+$Palered: hsl(357, 100%, 86%);
+
+$Darkblue: hsl(212, 24%, 26%);
+$GrayishBlue: hsl(211, 10%, 45%);
+$Lightgray: hsl(223, 19%, 93%);
+$Verylightgray: hsl(228, 33%, 97%);
+$White: hsl(0, 0%, 100%);
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  width: 1440px;
+  margin: auto;
+  background-color: $Verylightgray;
+  font-family: "Rubik", sans-serif;
+  font-size: 18px;
+}
+
+.comments__section {
+  padding-top: 65px;
+  margin: auto;
+  width: 730px;
+}
+.comment__wrapper {
+}
+.comment {
+  padding: 25px 0;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: 85px 1fr min-content;
+  align-items: center;
+  .like__section {
+    text-align: center;
+    background-color: $Verylightgray;
+    padding: 10px;
+    width: 40px;
+    border-radius: 10px;
+    justify-self: center;
+    height: fit-content;
+    span {
+      font-weight: 500;
+      font-size: 0.9em;
+    }
+    .icon {
+      color: $Lightgrayishblue;
+    }
+    .number {
+      color: $Moderateblue;
+      margin: 10px 0;
+      display: block;
+    }
+  }
+  .content__section {
+    .top__section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .profile {
+        display: flex;
+        align-items: center;
+        img {
+          height: 30px;
+        }
+        .profile__name {
+          margin-left: 15px;
+          font-weight: 500;
+          color: $Darkblue;
+        }
+        .createdAt {
+          margin-left: 15px;
+          color: $GrayishBlue;
+        }
+      }
+    }
+    .comment-text {
+      margin-top: 15px;
+      color: $GrayishBlue;
+      font-size: 0.9em;
+      line-height: 1.5em;
+    }
+  }
+}
+.replies {
+  grid-column: 2;
+  grid-template-columns: 40px 1fr min-content;
+  align-items: center;
+  display: grid;
+}

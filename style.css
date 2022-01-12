@@ -1,0 +1,119 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.container {
+  width: 1440px;
+  margin: auto;
+  background-color: #f5f6fa;
+  font-family: "Rubik", sans-serif;
+  font-size: 18px;
+}
+
+.comments__section {
+  padding-top: 65px;
+  margin: auto;
+  width: 730px;
+}
+
+.comment {
+  padding: 25px 0;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 85px 1fr min-content;
+      grid-template-columns: 85px 1fr -webkit-min-content;
+      grid-template-columns: 85px 1fr min-content;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.comment .like__section {
+  text-align: center;
+  background-color: #f5f6fa;
+  padding: 10px;
+  width: 40px;
+  border-radius: 10px;
+  -ms-grid-column-align: center;
+      justify-self: center;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+.comment .like__section span {
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+.comment .like__section .icon {
+  color: #c3c4ef;
+}
+
+.comment .like__section .number {
+  color: #5457b6;
+  margin: 10px 0;
+  display: block;
+}
+
+.comment .content__section .top__section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.comment .content__section .top__section .profile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.comment .content__section .top__section .profile img {
+  height: 30px;
+}
+
+.comment .content__section .top__section .profile .profile__name {
+  margin-left: 15px;
+  font-weight: 500;
+  color: #324152;
+}
+
+.comment .content__section .top__section .profile .createdAt {
+  margin-left: 15px;
+  color: #67727e;
+}
+
+.comment .content__section .comment-text {
+  margin-top: 15px;
+  color: #67727e;
+  font-size: 0.9em;
+  line-height: 1.5em;
+}
+
+.replies {
+  -ms-grid-column: 2;
+  grid-column: 2;
+  -ms-grid-columns: 40px 1fr min-content;
+      grid-template-columns: 40px 1fr -webkit-min-content;
+      grid-template-columns: 40px 1fr min-content;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -ms-grid;
+  display: grid;
+}
+/*# sourceMappingURL=style.css.map */
