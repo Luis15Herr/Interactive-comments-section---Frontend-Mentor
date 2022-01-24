@@ -2,32 +2,39 @@ fetch("data.json")
   .then((response) => response.json())
   .then((data) => {
     datos = data;
-    currentUser = datos.currentUser;
     comments = datos.comments;
+    currentUser = datos.currentUser;
+    ////////////////////////////////////////////
     buildComments();
-    addBtn();
-    lastId();
+    addBtns();
+    createCommentInput();
+    textboxCommentListener();
   });
 
 function buildComments() {
   let n = 0;
   comments.forEach((item) => {
-    html = `<div class="comment">
-    <div class="comment__wrapper" data-id="${item.id}">
+    html = `<div class="comment" data-id="${item.id}">
+    <div class="comment__wrapper wrapper" >
 
-    <div class="like__section">
-    <img class='icon plus' src="./images/icon-plus.svg" alt="PLUS BTN"> <span class='number'>${item.score}</span> <img class='icon minus' src="./images/icon-minus.svg" alt="MINUS BTN">
+    <div class="comment__score">
+    <img class='comment__score-icon comment__score-item upvote' src="./images/icon-plus.svg" alt="PLUS BTN"> <span class='comment__score-number'>${item.score}</span> <img class='comment__score-icon comment__score-item downvote' src="./images/icon-minus.svg" alt="MINUS BTN">
     </div>
-    <div class="content__section">
-      <div class="top__section">
-        <div class="profile">
-          <img src="${item.user.image.png}" alt="" />
-          <span class="profile__name"> ${item.user.username}</span>
-          <span class="createdAt">${item.createdAt}</span>
+    <div class="comment__options comment__options--mobile">
+          <span class="comment__btn reply-btn"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
         </div>
-          <span class="share"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
+    <div class="inner__comment">
+      <div class="comment__top-section">
+        <div class="comment__profile">
+          <img class="comment__profile-img" src="${item.user.image.png}" alt="" />
+          <span class="comment__profile-name"> ${item.user.username}</span>
+          <span class="comment__createdAt-info">${item.createdAt}</span>
+        </div>
+        <div class="comment__options">
+          <span class="comment__btn reply-btn"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
+        </div>
       </div>
-      <div class="comment-text">
+      <div class="comment__text">
         ${item.content}
       </div>
     </div>
@@ -35,84 +42,174 @@ function buildComments() {
   </div>`;
 
     document.querySelector(".comments__section").innerHTML += html;
-
-    if (item.replies != 0) {
-      n++;
+    if (item.replies.length != 0) {
       item.replies.forEach((reply) => {
-        replies = `<div class="replies" data-id="${reply.id}">
-      <div class="like__section">
-      <img class='icon plus' src="./images/icon-plus.svg" alt="PLUS BTN"> <span class='number'>${reply.score}</span> <img class='icon minus' src="./images/icon-minus.svg" alt="MINUS BTN">
+        if (reply.user.username === currentUser.username) {
+          option = `<div class='comment__options'>
+          <span class="comment__btn delete-btn"><img src="./images/icon-delete.svg" alt="Edit btn">Delete</span>
+          <span class="comment__btn edit-btn"><img src="./images/icon-edit.svg" alt="Edit btn">Edit</span>
+          </div>`;
+          optionMobile = `<div class='comment__options comment__options--mobile'>
+          <span class="comment__btn delete-btn"><img src="./images/icon-delete.svg" alt="Edit btn">Delete</span>
+          <span class="comment__btn edit-btn"><img src="./images/icon-edit.svg" alt="Edit btn">Edit</span>
+          </div>`;
+        } else {
+          option = `<div class="comment__options">
+          <span class="comment__btn reply-btn"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
+          </div>`;
+
+          optionMobile = `<div class="comment__options comment__options--mobile">
+          <span class="comment__btn reply-btn"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
+          </div>`;
+        }
+
+        replies = `<div class="reply" data-id="${reply.id}">
+        <div class="reply__wrapper wrapper">
+      <div class="comment__score">
+      <img class='comment__score-icon comment__score-item upvote' src="./images/icon-plus.svg" alt="PLUS BTN"> <span class='comment__score-number'>${reply.score}</span> <img class='comment__score-icon comment__score-item downvote' src="./images/icon-minus.svg" alt="MINUS BTN">
       </div>
-      <div class="content__section">
-        <div class="top__section">
-          <div class="profile">
-            <img src="${reply.user.image.png}" alt="" />
-            <span class="profile__name"> ${reply.user.username}</span>
-            <span class="createdAt">${reply.createdAt}</span>
+      ${optionMobile}
+      <div class="inner__comment">
+        <div class="comment__top-section">
+          <div class="comment__profile">
+            <img class="comment__profile-img" src="${reply.user.image.png}" alt="" />
+            <span class="comment__profile-name"> ${reply.user.username}</span>
+            <span class="comment__createdAt-info">${reply.createdAt}</span>
           </div>
-            <span class="share"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
+          ${option}
         </div>
-        <div class="comment-text">
+        <div class="comment__text">
+        <span class='comment__replyingTo'>@${reply.replyingTo}</span>
           ${reply.content}
         </div>
+      </div>
       </div>
     </div>`;
         document.querySelectorAll(".comment")[n].innerHTML += replies;
       });
     }
+    n++;
   });
 }
 
 function buildReply() {
-  let reply = comments[whoPush].replies.at(-1);
-  replies = `<div class="replies" data-id="${reply.id}">
-      <div class="like__section">
-      <img class='icon plus' src="./images/icon-plus.svg" alt="PLUS BTN"> <span class='number'>${reply.score}</span> <img class='icon minus' src="./images/icon-minus.svg" alt="MINUS BTN">
+  let reply = comments[indexOfCommentF].replies.at(-1);
+  replies = `<div class="reply new-reply" data-id="${reply.id}">
+  <div class="reply__wrapper wrapper">
+      <div class="comment__score">
+      <img class='comment__score-icon comment__score-item upvote' src="./images/icon-plus.svg" alt="PLUS BTN"> <span class='comment__score-number'>${reply.score}</span> <img class='comment__score-icon comment__score-item downvote' src="./images/icon-minus.svg" alt="MINUS BTN">
       </div>
-      <div class="content__section">
-        <div class="top__section">
-          <div class="profile">
-            <img src="${reply.user.image.png}" alt="" />
-            <span class="profile__name"> ${reply.user.username}</span>
-            <span class="createdAt">${reply.createdAt}</span>
+      <div class='comment__options comment__options--mobile'>
+          <span class="comment__btn delete-btn"><img src="./images/icon-delete.svg" alt="Edit btn">Delete</span>
+          <span class="comment__btn edit-btn"><img src="./images/icon-edit.svg" alt="Edit btn">Edit</span>
           </div>
-            <span class="share"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
+      <div class="inner__comment">
+        <div class="comment__top-section">
+          <div class="comment__profile">
+          <img class="comment__profile-img" src="${reply.user.image.png}" alt="" />
+          <span class="comment__profile-name"> ${reply.user.username}</span>
+          <span class="comment__createdAt-info">${reply.createdAt}</span>
+          </div>
+          <div class='comment__options'>
+            <span class="comment__btn delete-btn"><img src="./images/icon-delete.svg" alt="Edit btn">Delete</span>
+            <span class="comment__btn edit-btn"><img src="./images/icon-edit.svg" alt="Edit btn">Edit</span>
+            </div>
         </div>
-        <div class="comment-text">
+        <div class="comment__text">
+        <span class='comment__replyingTo'>@${reply.replyingTo}</span>
           ${reply.content}
         </div>
       </div>
+      </div>
     </div>`;
-  document.querySelectorAll(".comment")[whoPush].innerHTML += replies;
-  addBtn();
+  document.querySelector(`[data-id='${idOfCommentF}']`).innerHTML += replies;
+  addBtns();
+  buildDeleteBtn();
+  console.table(comments[indexOfCommentF].replies);
 }
 
-let lastesId;
+function buildComment() {
+  let comment = comments.at(-1);
+  html = `<div class="comment" data-id="${comment.id}">
+  <div class="comment__wrapper wrapper">
+      <div class="comment__score">
+      <img class='comment__score-icon comment__score-item upvote' src="./images/icon-plus.svg" alt="PLUS BTN"> <span class='comment__score-number'>${comment.score}</span> <img class='comment__score-icon comment__score-item downvote' src="./images/icon-minus.svg" alt="MINUS BTN">
+      </div>
+      <div class='comment__options comment__options--mobile'>
+          <span class="comment__btn delete-btn"><img src="./images/icon-delete.svg" alt="Edit btn">Delete</span>
+          <span class="comment__btn edit-btn"><img src="./images/icon-edit.svg" alt="Edit btn">Edit</span>
+          </div>
+      <div class="inner__comment">
+        <div class="comment__top-section">
+          <div class="comment__profile">
+          <img class="comment__profile-img" src="${comment.user.image.png}" alt="" />
+          <span class="comment__profile-name"> ${comment.user.username}</span>
+          <span class="comment__createdAt-info">${comment.createdAt}</span>
+          </div>
+          <div class='comment__options'>
+            <span class="comment__btn delete-btn"><img src="./images/icon-delete.svg" alt="Edit btn">Delete</span>
+            <span class="comment__btn edit-btn"><img src="./images/icon-edit.svg" alt="Edit btn">Edit</span>
+            </div>
+        </div>
+        <div class="comment__text">
+          ${comment.content}
+        </div>
+      </div>
+      </div>
+    </div>`;
+  document.querySelector(".comments__section").innerHTML += html;
+  addBtns();
+  buildDeleteBtn();
+}
+
+let lastesId; // Save the biggest id of comments and corresponding function
 function lastId() {
-  let bigId = 0;
-  let bigRId = 0;
-  let i = 0;
+  let biggestCommentId = 0;
+  let biggestReplyId = 0;
   for (let coment of comments) {
-    if (coment.id > bigId) {
-      bigId = coment.id;
+    if (coment.id > biggestCommentId) {
+      biggestCommentId = coment.id;
     }
-    for (let comente of comments[i].replies) {
-      if (comente.id > bigRId) {
-        bigRId = comente.id;
+    for (let reply of coment.replies) {
+      if (reply.id > biggestReplyId) {
+        biggestReplyId = reply.id;
       }
     }
-    i++;
   }
 
-  if (bigRId > bigId) {
-    latestId = bigRId;
+  if (biggestReplyId > biggestCommentId) {
+    lastesId = biggestReplyId;
   } else {
-    lastesId = bigId;
+    lastesId = biggestCommentId;
   }
-  return latestId + 1;
+  lastesId++;
+  return lastesId;
 }
 
-function creatorObj(content) {
+function createComment(content) {
+  let comment = new Object();
+  comment.id = lastId();
+  comment.content = content;
+  comment.createdAt = "1 week ago";
+  comment.score = 0;
+  comment.user = {
+    image: {
+      png: currentUser.image.png,
+    },
+    username: currentUser.username,
+  };
+  comment.replies = [];
+  document.querySelector("#sendComment").innerText = "";
+  return comment;
+}
+
+function pushComment() {
+  let inputComment = document.querySelector("#sendComment").innerText;
+  comments.push(createComment(inputComment));
+  buildComment();
+}
+
+function createReply(content) {
   let reply = new Object();
   reply.id = lastId();
   reply.content = content;
@@ -122,71 +219,139 @@ function creatorObj(content) {
     image: {
       png: currentUser.image.png,
     },
+    username: currentUser.username,
   };
-  reply.replyingTo =
-    document.querySelectorAll(".profile__name")[whoPush].innerText;
-  reply.username = currentUser.username;
-  document.querySelector("#test").innerText = "";
+  reply.replyingTo = document.querySelector(
+    `[data-id='${idElementSelected}'] .comment__profile-name`
+  ).innerText;
+  document.querySelector("#textboxReply").innerText = "";
   return reply;
 }
 
-let whoPush;
+function textboxCommentListener() {
+  let textbox = document.querySelector("#sendComment");
+  let btn = document.querySelector("#commentBtn");
 
-function push(e) {
-  if (e.key === "Enter") {
-    comments[whoPush].replies.push(
-      creatorObj(document.querySelector("#test").innerText)
-    );
-    buildReply();
-  }
+  textbox.addEventListener("keyup", function (e) {
+    if (e.key === "Enter") {
+      pushComment();
+    }
+  });
+  btn.addEventListener("click", pushComment);
 }
 
-function addInput() {
-  if (document.querySelector(".input__section")) {
-    document.querySelector(".input__section").remove();
-  }
+let indexOfCommentF;
+let idOfCommentF;
 
-  let comments = document.querySelectorAll(".comment");
-  let test = `
-  <div class="input__section">
-    <img class='profile__img' src="${currentUser.image.png}" alt="Current User Image" />
-    <span class="textarea" role="textbox" id="test" contenteditable></span>
-    <button>REPLY</button>
-  </div>`;
-  comments[whoPush].insertAdjacentHTML("afterend", test);
-  //document.querySelector("#test").innerHTML = `<span class="replyTo">@${
-  //document.querySelectorAll(".profile__name")[whoPush].innerText
-  //}<span>`;
-
-  document.querySelector("#test").addEventListener("keypress", push);
-}
-
-function addBtn() {
-  let plus = document.querySelectorAll(".plus");
-  plus.forEach((icon) => {
-    icon.addEventListener("click", rateGood);
-  });
-
-  let minus = document.querySelectorAll(".minus");
-  minus.forEach((icon) => {
-    icon.addEventListener("click", rateBad);
-  });
-
-  let arrP = Array.from(plus);
-  let arrM = Array.from(minus);
-  let numberHTML = document.querySelectorAll(".number");
-
-  function rateGood(e) {
-    let index = arrP.indexOf(this);
-    let elementToLike = e.target.parentNode.parentNode.dataset.id;
-
-    for (coment of comments) {
-      if (coment.id === parseInt(elementToLike)) {
-        coment.score++;
-        numberHTML[index].innerHTML = coment.score;
+function pushReply() {
+  for (coment of comments) {
+    if (coment.id === idElementSelected) {
+      indexOfCommentF = comments.indexOf(coment);
+      idOfCommentF = parseInt(coment.id);
+    }
+    for (reply of coment.replies) {
+      if (reply.id === idElementSelected) {
+        indexOfCommentF = comments.indexOf(coment);
+        idOfCommentF = parseInt(coment.id);
       }
-      for (replies of coment.replies) {
-        if (replies.id === parseInt(elementToLike)) {
+    }
+  }
+  comments[indexOfCommentF].replies.push(
+    createReply(document.querySelector("#textboxReply").innerText)
+  );
+  buildReply();
+  buildDeleteBtn();
+  document.querySelector(".input__section").remove();
+}
+
+function replyEnter(e) {
+  if (e.key === "Enter") {
+    pushReply();
+  }
+}
+
+function addReplyInput() {
+  if (document.querySelector(".input__section--reply")) {
+    document.querySelector(".input__section--reply").remove();
+  }
+
+  let html = `
+  <div class="input__section input__section--reply">
+  <img class='profile__img' src="${currentUser.image.png}" alt="Current User Image" />
+  <span class="textarea" role="textbox" id="textboxReply" contenteditable></span>
+  <button class="primary-btn" id='textboxReplyBtn'>REPLY</button>
+  </div>`;
+
+  console.log(idElementSelected);
+  document
+    .querySelector(`[data-id='${parseInt(idElementSelected)}']`)
+    .insertAdjacentHTML("afterend", html);
+  for (comment of comments) {
+    for (reply of comment.replies) {
+      if (idElementSelected === reply.id) {
+        document.querySelector(".input__section").classList.add("input--reply");
+      }
+    }
+  }
+  document
+    .querySelector("#textboxReply")
+    .addEventListener("keypress", replyEnter);
+  document
+    .querySelector("#textboxReplyBtn")
+    .addEventListener("click", pushReply);
+
+  if (document.querySelector(".update")) {
+    document.querySelector(".update").addEventListener("click", pushReply);
+  }
+}
+
+function createCommentInput() {
+  let html = `<div class="input__section">
+  <img
+    class="profile__img"
+    src="${currentUser.image.png}"
+    alt="Current User Image"
+  />
+  <span
+    class="textarea"
+    role="textbox"
+    id="sendComment"
+    placeholder="Add a comment..."
+    contenteditable
+  ></span>
+  <button id="commentBtn" class="primary-btn">SEND</button>
+</div>`;
+  document.querySelector(".comments__input-container").innerHTML = html;
+}
+
+function addBtns() {
+  buildDeleteBtn();
+
+  let upvoteBtns = document.querySelectorAll(".upvote");
+  upvoteBtns.forEach((icon) => {
+    icon.addEventListener("click", upVote);
+  });
+
+  let downvoteBtns = document.querySelectorAll(".downvote");
+  downvoteBtns.forEach((icon) => {
+    icon.addEventListener("click", downVote);
+  });
+
+  let upvoteBtnsArr = Array.from(upvoteBtns);
+  let downvoteBtnsArr = Array.from(downvoteBtns);
+  let numberHTML = document.querySelectorAll(".comment__score-number");
+
+  function upVote(e) {
+    let index = upvoteBtnsArr.indexOf(this);
+    let commentToLike = e.target.parentNode.parentNode.parentNode.dataset.id;
+
+    for (comment of comments) {
+      if (comment.id === parseInt(commentToLike)) {
+        comment.score++;
+        numberHTML[index].innerHTML = comment.score;
+      }
+      for (replies of comment.replies) {
+        if (replies.id === parseInt(commentToLike)) {
           replies.score++;
           numberHTML[index].innerHTML = replies.score;
         }
@@ -194,17 +359,19 @@ function addBtn() {
     }
   }
 
-  function rateBad(e) {
-    let index = arrM.indexOf(this);
-    let elementToLike = e.target.parentNode.parentNode.dataset.id;
+  function downVote(e) {
+    let index = downvoteBtnsArr.indexOf(this);
+    let commentToDislike = e.target.parentNode.parentNode.parentNode.dataset.id;
 
-    for (coment of comments) {
-      if (coment.id === parseInt(elementToLike)) {
-        coment.score--;
-        numberHTML[index].innerHTML = coment.score;
+    for (comment of comments) {
+      if (comment.id === parseInt(commentToDislike)) {
+        comment.score--;
+        document.querySelector(
+          `[data-id='${commentToDislike}'] .comment__score-number`
+        ).innerHTML = comment.score;
       }
-      for (replies of coment.replies) {
-        if (replies.id === parseInt(elementToLike)) {
+      for (replies of comment.replies) {
+        if (replies.id === parseInt(commentToDislike)) {
           replies.score--;
           numberHTML[index].innerHTML = replies.score;
         }
@@ -212,18 +379,139 @@ function addBtn() {
     }
   }
 
-  let share = document.querySelectorAll(".share");
-  share.forEach((btn) => {
+  let getIdTest = document.querySelectorAll(".wrapper");
+  getIdTest.forEach((item) => {
+    item.addEventListener("click", function (e) {
+      idElementSelected = parseInt(e.currentTarget.parentNode.dataset.id);
+      console.log(idElementSelected);
+    });
+  });
+
+  let replyBtns = document.querySelectorAll(".reply-btn");
+  replyBtns.forEach((btn) => {
     btn.addEventListener("click", replyTo);
   });
-  let btn = Array.from(share);
-  function replyTo() {
-    whoPush = btn.indexOf(this);
-    addInput();
 
-    document.querySelector("#test").innerText =
-      "@" + document.querySelectorAll(".profile__name")[whoPush].innerText;
+  let edit = document.querySelectorAll(".edit-btn");
+  edit.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      setTimeout(function () {
+        isEditing();
+      }, 1);
+    });
+  });
+}
 
-    document.querySelector("#test").click();
+//Reply trigger
+let idElementSelected; //Save id to comment to reply
+function replyTo(e) {
+  setTimeout(function () {
+    addReplyInput();
+    //document.querySelector("#textboxReply").innerText =  "@" + document.querySelector(`[data-id='${idElementSelected}'] .comment__profile-name`).innerText;
+    document.querySelector("#textboxReply").focus();
+  }, 1);
+}
+//Active edit mode
+function isEditing(e) {
+  addBtns();
+  if (document.querySelector(".editionWrapper")) {
+    document.querySelector(".editionWrapper").remove();
+  }
+  let commentText = document.querySelector(
+    `[data-id='${idElementSelected}'] .comment__text`
+  );
+  idElement = idElementSelected;
+
+  for (comment of comments) {
+    if (comment.id === parseInt(idElement)) {
+      elementToEditId = comment.id;
+      content = comment.content;
+    }
+    for (reply of comment.replies) {
+      if (reply.id === parseInt(idElement)) {
+        elementToEditId = reply.id;
+        content = reply.content;
+      }
+    }
+  }
+
+  commentText.classList.add("isEditing");
+  let html = `<div class='editionWrapper'>
+  <span class="textarea" role="textbox" id="textboxEditing" contenteditable>${content}</span>
+  <button class="primary-btn update">UPDATE</button> </div>`;
+  commentText.insertAdjacentHTML("afterend", html);
+  buildUpdateBtn();
+  document
+    .querySelector("#textboxEditing")
+    .addEventListener("keypress", updateOnEnter);
+}
+
+let elementToEditId; //Save id of the element selected to edit
+function buildUpdateBtn() {
+  let updateBtn = document.querySelector(".update");
+  updateBtn.addEventListener("click", update);
+}
+
+//Function update, only work with click START
+function update(e) {
+  let commentText = document.querySelector(
+    `[data-id='${idElementSelected}'] .comment__text`
+  );
+  for (comment of comments) {
+    if (comment.id === elementToEditId) {
+      comment.content = document.querySelector("#textboxEditing").innerText;
+      document.querySelector(
+        `[data-id='${elementToEditId}'] .inner__comment .comment__text`
+      ).innerText = comment.content;
+    }
+    for (reply of comment.replies) {
+      if (reply.id === elementToEditId) {
+        reply.content = document.querySelector("#textboxEditing").innerText;
+        document.querySelector(
+          `[data-id='${elementToEditId}'] .inner__comment .comment__text`
+        ).innerText = reply.content;
+      }
+    }
+  }
+
+  buildDeleteBtn();
+  commentText.classList.remove("isEditing");
+  document.querySelector(".editionWrapper").remove();
+}
+function updateOnEnter(e) {
+  if (e.key === "Enter") {
+    update(e);
   }
 }
+//Same function that update, but only works with enter END
+
+//DELETE BTNS CREATION AND FUNCTION START
+function buildDeleteBtn() {
+  let deleteBtns = document.querySelectorAll(".delete-btn");
+  if (!deleteBtns) return;
+  deleteBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      setTimeout(function () {
+        deleteBtn();
+      }, 1);
+    });
+  });
+}
+
+function deleteBtn() {
+  for (comment of comments) {
+    if (comment.id === idElementSelected) {
+      document.querySelector(`[data-id='${idElementSelected}']`).remove();
+      let indexToDelete = comments.indexOf(comment);
+      comments.splice(indexToDelete, 1);
+    }
+    for (reply of comment.replies) {
+      if (reply.id === idElementSelected) {
+        document.querySelector(`[data-id='${idElementSelected}']`).remove();
+        let indexToDelete = comment.replies.indexOf(reply);
+        comment.replies.splice(indexToDelete, 1);
+      }
+    }
+  }
+}
+//DELETE BTNS CREATION AND FUNCTION END
