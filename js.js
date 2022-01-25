@@ -14,25 +14,46 @@ fetch("data.json")
 function buildComments() {
   let n = 0;
   comments.forEach((item) => {
+    if (item.user.username === currentUser.username) {
+      option = `<div class='comment__options'>
+        <span class="comment__btn delete-btn"><img src="./images/icon-delete.svg" alt="Edit btn">Delete</span>
+        <span class="comment__btn edit-btn"><img src="./images/icon-edit.svg" alt="Edit btn">Edit</span>
+        </div>`;
+      you = `<span class='comment__logged-indicator'>you</span>`;
+      optionMobile = `<div class='comment__options comment__options--mobile'>
+        <span class="comment__btn delete-btn"><img src="./images/icon-delete.svg" alt="Edit btn">Delete</span>
+        <span class="comment__btn edit-btn"><img src="./images/icon-edit.svg" alt="Edit btn">Edit</span>
+        </div>`;
+    } else {
+      option = `<div class="comment__options">
+        <span class="comment__btn reply-btn"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
+        </div>`;
+      you = ``;
+      optionMobile = `<div class="comment__options comment__options--mobile">
+        <span class="comment__btn reply-btn"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
+        </div>`;
+    }
+
     html = `<div class="comment" data-id="${item.id}">
     <div class="comment__wrapper wrapper" >
-
     <div class="comment__score">
-    <img class='comment__score-icon comment__score-item upvote' src="./images/icon-plus.svg" alt="PLUS BTN"> <span class='comment__score-number'>${item.score}</span> <img class='comment__score-icon comment__score-item downvote' src="./images/icon-minus.svg" alt="MINUS BTN">
+    <button class='comment__score-icon comment__score-item upvote' src="./images/icon-plus.svg" alt="PLUS BTN">
+    <svg width="11" height="11" xmlns="http://www.w3.org/2000/svg"><path d="M6.33 10.896c.137 0 .255-.05.354-.149.1-.1.149-.217.149-.354V7.004h3.315c.136 0 .254-.05.354-.149.099-.1.148-.217.148-.354V5.272a.483.483 0 0 0-.148-.354.483.483 0 0 0-.354-.149H6.833V1.4a.483.483 0 0 0-.149-.354.483.483 0 0 0-.354-.149H4.915a.483.483 0 0 0-.354.149c-.1.1-.149.217-.149.354v3.37H1.08a.483.483 0 0 0-.354.15c-.1.099-.149.217-.149.353v1.23c0 .136.05.254.149.353.1.1.217.149.354.149h3.333v3.39c0 .136.05.254.15.353.098.1.216.149.353.149H6.33Z" fill="#C5C6EF"/></svg>
+    </button> <span class='comment__score-number'>${item.score}</span> 
+    <button class='comment__score-icon comment__score-item downvote' src="./images/icon-minus.svg" alt="MINUS BTN">
+    <svg width="11" height="3" xmlns="http://www.w3.org/2000/svg"><path d="M9.256 2.66c.204 0 .38-.056.53-.167.148-.11.222-.243.222-.396V.722c0-.152-.074-.284-.223-.395a.859.859 0 0 0-.53-.167H.76a.859.859 0 0 0-.53.167C.083.437.009.57.009.722v1.375c0 .153.074.285.223.396a.859.859 0 0 0 .53.167h8.495Z" fill="#C5C6EF"/></svg>
+    </button>
     </div>
-    <div class="comment__options comment__options--mobile">
-          <span class="comment__btn reply-btn"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
-        </div>
+    ${optionMobile}
     <div class="inner__comment">
       <div class="comment__top-section">
         <div class="comment__profile">
-          <img class="comment__profile-img" src="${item.user.image.png}" alt="" />
+          <img class="comment__profile-img" src="${item.user.image.png}" alt="" />  
           <span class="comment__profile-name"> ${item.user.username}</span>
+          ${you}
           <span class="comment__createdAt-info">${item.createdAt}</span>
         </div>
-        <div class="comment__options">
-          <span class="comment__btn reply-btn"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
-        </div>
+       ${option}
       </div>
       <div class="comment__text">
         ${item.content}
@@ -49,6 +70,7 @@ function buildComments() {
           <span class="comment__btn delete-btn"><img src="./images/icon-delete.svg" alt="Edit btn">Delete</span>
           <span class="comment__btn edit-btn"><img src="./images/icon-edit.svg" alt="Edit btn">Edit</span>
           </div>`;
+          you = `<span class='comment__logged-indicator'>you</span>`;
           optionMobile = `<div class='comment__options comment__options--mobile'>
           <span class="comment__btn delete-btn"><img src="./images/icon-delete.svg" alt="Edit btn">Delete</span>
           <span class="comment__btn edit-btn"><img src="./images/icon-edit.svg" alt="Edit btn">Edit</span>
@@ -57,7 +79,7 @@ function buildComments() {
           option = `<div class="comment__options">
           <span class="comment__btn reply-btn"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
           </div>`;
-
+          you = ``;
           optionMobile = `<div class="comment__options comment__options--mobile">
           <span class="comment__btn reply-btn"><img src="./images/icon-reply.svg" alt="Reply btn">Reply</span>
           </div>`;
@@ -65,21 +87,26 @@ function buildComments() {
 
         replies = `<div class="reply" data-id="${reply.id}">
         <div class="reply__wrapper wrapper">
-      <div class="comment__score">
-      <img class='comment__score-icon comment__score-item upvote' src="./images/icon-plus.svg" alt="PLUS BTN"> <span class='comment__score-number'>${reply.score}</span> <img class='comment__score-icon comment__score-item downvote' src="./images/icon-minus.svg" alt="MINUS BTN">
-      </div>
+        <div class="comment__score">
+        <button class='comment__score-icon comment__score-item upvote' src="./images/icon-plus.svg" alt="PLUS BTN">
+        <svg width="11" height="11" xmlns="http://www.w3.org/2000/svg"><path d="M6.33 10.896c.137 0 .255-.05.354-.149.1-.1.149-.217.149-.354V7.004h3.315c.136 0 .254-.05.354-.149.099-.1.148-.217.148-.354V5.272a.483.483 0 0 0-.148-.354.483.483 0 0 0-.354-.149H6.833V1.4a.483.483 0 0 0-.149-.354.483.483 0 0 0-.354-.149H4.915a.483.483 0 0 0-.354.149c-.1.1-.149.217-.149.354v3.37H1.08a.483.483 0 0 0-.354.15c-.1.099-.149.217-.149.353v1.23c0 .136.05.254.149.353.1.1.217.149.354.149h3.333v3.39c0 .136.05.254.15.353.098.1.216.149.353.149H6.33Z" fill="#C5C6EF"/></svg>
+        </button> <span class='comment__score-number'>${reply.score}</span> 
+        <button class='comment__score-icon comment__score-item downvote' src="./images/icon-minus.svg" alt="MINUS BTN">
+        <svg width="11" height="3" xmlns="http://www.w3.org/2000/svg"><path d="M9.256 2.66c.204 0 .38-.056.53-.167.148-.11.222-.243.222-.396V.722c0-.152-.074-.284-.223-.395a.859.859 0 0 0-.53-.167H.76a.859.859 0 0 0-.53.167C.083.437.009.57.009.722v1.375c0 .153.074.285.223.396a.859.859 0 0 0 .53.167h8.495Z" fill="#C5C6EF"/></svg>
+        </button>
+        </div>
       ${optionMobile}
       <div class="inner__comment">
         <div class="comment__top-section">
           <div class="comment__profile">
             <img class="comment__profile-img" src="${reply.user.image.png}" alt="" />
             <span class="comment__profile-name"> ${reply.user.username}</span>
+            ${you}
             <span class="comment__createdAt-info">${reply.createdAt}</span>
           </div>
           ${option}
         </div>
         <div class="comment__text">
-        <span class='comment__replyingTo'>@${reply.replyingTo}</span>
           ${reply.content}
         </div>
       </div>
@@ -94,11 +121,17 @@ function buildComments() {
 
 function buildReply() {
   let reply = comments[indexOfCommentF].replies.at(-1);
+
   replies = `<div class="reply new-reply" data-id="${reply.id}">
   <div class="reply__wrapper wrapper">
-      <div class="comment__score">
-      <img class='comment__score-icon comment__score-item upvote' src="./images/icon-plus.svg" alt="PLUS BTN"> <span class='comment__score-number'>${reply.score}</span> <img class='comment__score-icon comment__score-item downvote' src="./images/icon-minus.svg" alt="MINUS BTN">
-      </div>
+  <div class="comment__score">
+  <button class='comment__score-icon comment__score-item upvote' src="./images/icon-plus.svg" alt="PLUS BTN">
+  <svg width="11" height="11" xmlns="http://www.w3.org/2000/svg"><path d="M6.33 10.896c.137 0 .255-.05.354-.149.1-.1.149-.217.149-.354V7.004h3.315c.136 0 .254-.05.354-.149.099-.1.148-.217.148-.354V5.272a.483.483 0 0 0-.148-.354.483.483 0 0 0-.354-.149H6.833V1.4a.483.483 0 0 0-.149-.354.483.483 0 0 0-.354-.149H4.915a.483.483 0 0 0-.354.149c-.1.1-.149.217-.149.354v3.37H1.08a.483.483 0 0 0-.354.15c-.1.099-.149.217-.149.353v1.23c0 .136.05.254.149.353.1.1.217.149.354.149h3.333v3.39c0 .136.05.254.15.353.098.1.216.149.353.149H6.33Z" fill="#C5C6EF"/></svg>
+  </button> <span class='comment__score-number'>${reply.score}</span> 
+  <button class='comment__score-icon comment__score-item downvote' src="./images/icon-minus.svg" alt="MINUS BTN">
+  <svg width="11" height="3" xmlns="http://www.w3.org/2000/svg"><path d="M9.256 2.66c.204 0 .38-.056.53-.167.148-.11.222-.243.222-.396V.722c0-.152-.074-.284-.223-.395a.859.859 0 0 0-.53-.167H.76a.859.859 0 0 0-.53.167C.083.437.009.57.009.722v1.375c0 .153.074.285.223.396a.859.859 0 0 0 .53.167h8.495Z" fill="#C5C6EF"/></svg>
+  </button>
+  </div>
       <div class='comment__options comment__options--mobile'>
           <span class="comment__btn delete-btn"><img src="./images/icon-delete.svg" alt="Edit btn">Delete</span>
           <span class="comment__btn edit-btn"><img src="./images/icon-edit.svg" alt="Edit btn">Edit</span>
@@ -108,6 +141,7 @@ function buildReply() {
           <div class="comment__profile">
           <img class="comment__profile-img" src="${reply.user.image.png}" alt="" />
           <span class="comment__profile-name"> ${reply.user.username}</span>
+          <span class='comment__logged-indicator'>you</span>
           <span class="comment__createdAt-info">${reply.createdAt}</span>
           </div>
           <div class='comment__options'>
@@ -116,7 +150,6 @@ function buildReply() {
             </div>
         </div>
         <div class="comment__text">
-        <span class='comment__replyingTo'>@${reply.replyingTo}</span>
           ${reply.content}
         </div>
       </div>
@@ -132,9 +165,14 @@ function buildComment() {
   let comment = comments.at(-1);
   html = `<div class="comment" data-id="${comment.id}">
   <div class="comment__wrapper wrapper">
-      <div class="comment__score">
-      <img class='comment__score-icon comment__score-item upvote' src="./images/icon-plus.svg" alt="PLUS BTN"> <span class='comment__score-number'>${comment.score}</span> <img class='comment__score-icon comment__score-item downvote' src="./images/icon-minus.svg" alt="MINUS BTN">
-      </div>
+  <div class="comment__score">
+  <button class='comment__score-icon comment__score-item upvote' src="./images/icon-plus.svg" alt="PLUS BTN">
+  <svg width="11" height="11" xmlns="http://www.w3.org/2000/svg"><path d="M6.33 10.896c.137 0 .255-.05.354-.149.1-.1.149-.217.149-.354V7.004h3.315c.136 0 .254-.05.354-.149.099-.1.148-.217.148-.354V5.272a.483.483 0 0 0-.148-.354.483.483 0 0 0-.354-.149H6.833V1.4a.483.483 0 0 0-.149-.354.483.483 0 0 0-.354-.149H4.915a.483.483 0 0 0-.354.149c-.1.1-.149.217-.149.354v3.37H1.08a.483.483 0 0 0-.354.15c-.1.099-.149.217-.149.353v1.23c0 .136.05.254.149.353.1.1.217.149.354.149h3.333v3.39c0 .136.05.254.15.353.098.1.216.149.353.149H6.33Z" fill="#C5C6EF"/></svg>
+  </button> <span class='comment__score-number'>${comment.score}</span> 
+  <button class='comment__score-icon comment__score-item downvote' src="./images/icon-minus.svg" alt="MINUS BTN">
+  <svg width="11" height="3" xmlns="http://www.w3.org/2000/svg"><path d="M9.256 2.66c.204 0 .38-.056.53-.167.148-.11.222-.243.222-.396V.722c0-.152-.074-.284-.223-.395a.859.859 0 0 0-.53-.167H.76a.859.859 0 0 0-.53.167C.083.437.009.57.009.722v1.375c0 .153.074.285.223.396a.859.859 0 0 0 .53.167h8.495Z" fill="#C5C6EF"/></svg>
+  </button>
+  </div>
       <div class='comment__options comment__options--mobile'>
           <span class="comment__btn delete-btn"><img src="./images/icon-delete.svg" alt="Edit btn">Delete</span>
           <span class="comment__btn edit-btn"><img src="./images/icon-edit.svg" alt="Edit btn">Edit</span>
@@ -144,6 +182,8 @@ function buildComment() {
           <div class="comment__profile">
           <img class="comment__profile-img" src="${comment.user.image.png}" alt="" />
           <span class="comment__profile-name"> ${comment.user.username}</span>
+          <span class='comment__logged-indicator'>you</span>
+
           <span class="comment__createdAt-info">${comment.createdAt}</span>
           </div>
           <div class='comment__options'>
@@ -186,6 +226,16 @@ function lastId() {
   return lastesId;
 }
 
+function detectTag(text) {
+  let inputSplit = text.split(" ");
+  if (inputSplit[0].includes("@") && inputSplit[0].trim().length > 1) {
+    html = `<span class='comment__replyingTo'>${inputSplit[0]}</span>`;
+    inputSplit[0] = html;
+  }
+  textAnalized = inputSplit.join(" ");
+  return textAnalized;
+}
+
 function createComment(content) {
   let comment = new Object();
   comment.id = lastId();
@@ -199,13 +249,13 @@ function createComment(content) {
     username: currentUser.username,
   };
   comment.replies = [];
-  document.querySelector("#sendComment").innerText = "";
+  document.querySelector("#sendComment").value = "";
   return comment;
 }
 
 function pushComment() {
-  let inputComment = document.querySelector("#sendComment").innerText;
-  comments.push(createComment(inputComment));
+  let inputComment = document.querySelector("#sendComment").value;
+  comments.push(createComment(detectTag(inputComment)));
   buildComment();
 }
 
@@ -224,7 +274,7 @@ function createReply(content) {
   reply.replyingTo = document.querySelector(
     `[data-id='${idElementSelected}'] .comment__profile-name`
   ).innerText;
-  document.querySelector("#textboxReply").innerText = "";
+  document.querySelector("#textboxReply").value = "";
   return reply;
 }
 
@@ -244,6 +294,7 @@ let indexOfCommentF;
 let idOfCommentF;
 
 function pushReply() {
+  let textboxReply = document.querySelector("#textboxReply").value;
   for (coment of comments) {
     if (coment.id === idElementSelected) {
       indexOfCommentF = comments.indexOf(coment);
@@ -256,9 +307,7 @@ function pushReply() {
       }
     }
   }
-  comments[indexOfCommentF].replies.push(
-    createReply(document.querySelector("#textboxReply").innerText)
-  );
+  comments[indexOfCommentF].replies.push(createReply(detectTag(textboxReply)));
   buildReply();
   buildDeleteBtn();
   document.querySelector(".input__section").remove();
@@ -278,7 +327,7 @@ function addReplyInput() {
   let html = `
   <div class="input__section input__section--reply">
   <img class='profile__img' src="${currentUser.image.png}" alt="Current User Image" />
-  <span class="textarea" role="textbox" id="textboxReply" contenteditable></span>
+  <textarea class="textarea" role="textbox" id="textboxReply" contenteditable></textarea>
   <button class="primary-btn" id='textboxReplyBtn'>REPLY</button>
   </div>`;
 
@@ -306,19 +355,19 @@ function addReplyInput() {
 }
 
 function createCommentInput() {
-  let html = `<div class="input__section">
+  let html = `<div class="input__section input__section-main">
   <img
     class="profile__img"
     src="${currentUser.image.png}"
     alt="Current User Image"
   />
-  <span
+  <textarea
     class="textarea"
     role="textbox"
     id="sendComment"
     placeholder="Add a comment..."
     contenteditable
-  ></span>
+  ></textarea>
   <button id="commentBtn" class="primary-btn">SEND</button>
 </div>`;
   document.querySelector(".comments__input-container").innerHTML = html;
@@ -329,67 +378,34 @@ function addBtns() {
 
   let upvoteBtns = document.querySelectorAll(".upvote");
   upvoteBtns.forEach((icon) => {
-    icon.addEventListener("click", upVote);
+    icon.addEventListener("click", function () {
+      setTimeout(function () {
+        upVote();
+      }, 1);
+    });
   });
 
   let downvoteBtns = document.querySelectorAll(".downvote");
   downvoteBtns.forEach((icon) => {
-    icon.addEventListener("click", downVote);
+    icon.addEventListener("click", function () {
+      setTimeout(function () {
+        downVote();
+      }, 1);
+    });
   });
-
-  let upvoteBtnsArr = Array.from(upvoteBtns);
-  let downvoteBtnsArr = Array.from(downvoteBtns);
-  let numberHTML = document.querySelectorAll(".comment__score-number");
-
-  function upVote(e) {
-    let index = upvoteBtnsArr.indexOf(this);
-    let commentToLike = e.target.parentNode.parentNode.parentNode.dataset.id;
-
-    for (comment of comments) {
-      if (comment.id === parseInt(commentToLike)) {
-        comment.score++;
-        numberHTML[index].innerHTML = comment.score;
-      }
-      for (replies of comment.replies) {
-        if (replies.id === parseInt(commentToLike)) {
-          replies.score++;
-          numberHTML[index].innerHTML = replies.score;
-        }
-      }
-    }
-  }
-
-  function downVote(e) {
-    let index = downvoteBtnsArr.indexOf(this);
-    let commentToDislike = e.target.parentNode.parentNode.parentNode.dataset.id;
-
-    for (comment of comments) {
-      if (comment.id === parseInt(commentToDislike)) {
-        comment.score--;
-        document.querySelector(
-          `[data-id='${commentToDislike}'] .comment__score-number`
-        ).innerHTML = comment.score;
-      }
-      for (replies of comment.replies) {
-        if (replies.id === parseInt(commentToDislike)) {
-          replies.score--;
-          numberHTML[index].innerHTML = replies.score;
-        }
-      }
-    }
-  }
 
   let getIdTest = document.querySelectorAll(".wrapper");
   getIdTest.forEach((item) => {
-    item.addEventListener("click", function (e) {
-      idElementSelected = parseInt(e.currentTarget.parentNode.dataset.id);
-      console.log(idElementSelected);
-    });
+    item.addEventListener("click", getIdFromElement);
   });
 
   let replyBtns = document.querySelectorAll(".reply-btn");
   replyBtns.forEach((btn) => {
-    btn.addEventListener("click", replyTo);
+    btn.addEventListener("click", function () {
+      setTimeout(function () {
+        replyTo();
+      }, 1);
+    });
   });
 
   let edit = document.querySelectorAll(".edit-btn");
@@ -401,15 +417,60 @@ function addBtns() {
     });
   });
 }
+function getIdFromElement(e) {
+  idElementSelected = parseInt(e.currentTarget.parentNode.dataset.id);
+  console.log(idElementSelected);
+}
+
+function upVote() {
+  let commentToLike = idElementSelected;
+  let numberHTML = document.querySelector(
+    `[data-id='${commentToLike}'] .comment__score-number`
+  );
+  for (comment of comments) {
+    if (comment.id === parseInt(commentToLike)) {
+      comment.score++;
+      numberHTML.innerHTML = comment.score;
+    }
+    for (reply of comment.replies) {
+      if (reply.id === commentToLike) {
+        reply.score++;
+        numberHTML.innerHTML = reply.score;
+      }
+    }
+  }
+}
+
+function downVote() {
+  let commentToDislike = idElementSelected;
+  let numberHTMLO = document.querySelector(
+    `[data-id='${commentToDislike}'] .comment__score-number`
+  );
+  for (comment of comments) {
+    if (comment.id === parseInt(commentToDislike)) {
+      comment.score--;
+      numberHTMLO.innerHTML = comment.score;
+    }
+    for (replies of comment.replies) {
+      if (replies.id === parseInt(commentToDislike)) {
+        replies.score--;
+        numberHTMLO.innerHTML = replies.score;
+      }
+    }
+  }
+}
 
 //Reply trigger
 let idElementSelected; //Save id to comment to reply
 function replyTo(e) {
-  setTimeout(function () {
-    addReplyInput();
-    //document.querySelector("#textboxReply").innerText =  "@" + document.querySelector(`[data-id='${idElementSelected}'] .comment__profile-name`).innerText;
-    document.querySelector("#textboxReply").focus();
-  }, 1);
+  addReplyInput();
+  let textbox = document.querySelector("#textboxReply");
+  textbox.value =
+    "@" +
+    document.querySelector(
+      `[data-id='${idElementSelected}'] .comment__profile-name`
+    ).innerText;
+  textbox.focus();
 }
 //Active edit mode
 function isEditing(e) {
@@ -473,7 +534,6 @@ function update(e) {
       }
     }
   }
-
   buildDeleteBtn();
   commentText.classList.remove("isEditing");
   document.querySelector(".editionWrapper").remove();
@@ -492,10 +552,25 @@ function buildDeleteBtn() {
   deleteBtns.forEach((btn) => {
     btn.addEventListener("click", function () {
       setTimeout(function () {
-        deleteBtn();
+        showDeleteModal();
       }, 1);
     });
   });
+}
+function showDeleteModal() {
+  let overlay = document.querySelector(".overlay");
+  overlay.classList.add("overlay--show");
+  document
+    .querySelector(".modal__btn--cancel")
+    .addEventListener("click", function () {
+      overlay.classList.remove("overlay--show");
+    });
+  document
+    .querySelector(".modal__btn--delete")
+    .addEventListener("click", function () {
+      deleteBtn();
+      overlay.classList.remove("overlay--show");
+    });
 }
 
 function deleteBtn() {

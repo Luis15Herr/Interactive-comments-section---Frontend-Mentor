@@ -23,7 +23,17 @@
     <!-- Pull dynamic content from the data.json file -->
     <div class="comments__section"></div>
     <div class="comments__input-container"></div>
-
+    <div class="overlay">
+      <div class="modal">
+        <span class="modal__tittle"> Delete comment </span>
+        <span class="modal__text">
+          Are you sure want to delete this comment? This will remove the comment
+          and can't be undone.
+        </span>
+        <button class="modal__btn modal__btn--cancel">NO, CANCEL</button>
+        <button class="modal__btn modal__btn--delete">YES, DELETE</button>
+      </div>
+    </div>
     <div class="attribution">
       Challenge by
       <a href="https://www.frontendmentor.io?ref=challenge" target="_blank"

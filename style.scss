@@ -37,8 +37,8 @@ span[placeholder]:empty:before {
   background-color: $Verylightgray;
   font-family: "Rubik", sans-serif;
   font-size: 18px;
+  height: 100%;
 }
-
 .comments__section {
   padding-top: 65px;
   margin: auto;
@@ -82,9 +82,18 @@ span[placeholder]:empty:before {
   font-size: 0.9em;
 }
 .comment__score-icon {
-  color: $Lightgrayishblue;
+  transition: ease 0.2s;
+  width: 10px;
+  height: 10px;
+  background: none;
+  border: none;
   &:hover {
     cursor: pointer;
+    svg path {
+      transition: ease 0.2s;
+
+      fill: $Moderateblue;
+    }
   }
 }
 .comment__score-number {
@@ -111,6 +120,15 @@ span[placeholder]:empty:before {
 .comment__profile {
   display: flex;
   align-items: center;
+}
+.comment__logged-indicator {
+  margin-left: 9px;
+  line-height: 1;
+  background-color: $Moderateblue;
+  color: $White;
+  font-size: 0.75em;
+  padding: 3px 5px;
+  border-radius: 3px;
 }
 
 .comment__profile-img {
@@ -278,6 +296,76 @@ span[placeholder]:empty:before {
 .comment__options--mobile {
   display: none;
 }
+
+.comments__input-container {
+  padding-bottom: 40px;
+}
+
+.overlay {
+  background: #00000069;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  opacity: 0;
+  z-index: 10000;
+  display: none;
+}
+.overlay--show {
+  opacity: 1;
+  display: flex;
+}
+
+.modal {
+  background-color: white;
+  padding: 34px 33px 33px;
+  width: 400px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  border-radius: 7px;
+}
+
+.modal__tittle {
+  display: block;
+  font-size: 1.25em;
+  color: $Darkblue;
+  font-weight: 500;
+  margin-bottom: 18px;
+}
+
+.modal__text {
+  color: $GrayishBlue;
+  margin-bottom: 22px;
+  display: block;
+  font-size: 0.95em;
+  line-height: 24px;
+}
+.modal__btn {
+  border: 0;
+  padding: 15px 35px;
+  font-weight: 600;
+  font-size: 0.78em;
+  background-color: $GrayishBlue;
+  color: white;
+  border-radius: 7px;
+  transition: ease 0.2s;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: ease 0.2s;
+  }
+}
+.modal__btn--delete {
+  background-color: $SoftRed;
+}
+
 @media screen and (max-width: 600px) {
   .container {
     width: 100%;
@@ -371,6 +459,13 @@ span[placeholder]:empty:before {
     .textarea {
       min-width: 100%;
     }
+  }
+  .modal {
+    width: 345px;
+  }
+  .modal__btn {
+    padding: 15px 20px;
+    font-size: 0.81em;
   }
 }
 
