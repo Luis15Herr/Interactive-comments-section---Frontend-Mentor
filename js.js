@@ -254,7 +254,7 @@ function createComment(content) {
   let comment = new Object();
   comment.id = lastId();
   comment.content = content;
-  comment.createdAt = "1 week ago";
+  comment.createdAt = Date.now();
   comment.score = 0;
   comment.user = {
     image: {
@@ -272,6 +272,7 @@ function pushComment() {
   if (inputComment != "") {
     comments.push(createComment(inputComment));
     buildComment();
+    tiempo();
   }
   document.querySelector("#sendComment").blur();
 }
@@ -613,3 +614,47 @@ function deleteBtn() {
   }
 }
 //DELETE BTNS CREATION AND FUNCTION END
+
+function timeSince(date) {
+  var seconds = Math.floor((new Date() - date) / 1000);
+
+  var interval = seconds / 31536000;
+
+  if (interval > 1) {
+    return Math.floor(interval) + " years ago";
+  }
+  interval = seconds / 2592000;
+  if (interval > 1) {
+    return Math.floor(interval) + " months ago";
+  }
+  interval = seconds / 86400;
+  if (interval > 1) {
+    return Math.floor(interval) + " days ago";
+  }
+  interval = seconds / 3600;
+  if (interval > 1) {
+    return Math.floor(interval) + " hours ago";
+  }
+  interval = seconds / 60;
+  if (interval > 1) {
+    return Math.floor(interval) + " minutes ago";
+  }
+  return /* Math.floor(seconds) + */ "a few seconds ago";
+}
+
+function tiempo() {
+  let dateAgo;
+  for (comment of comments) {
+    console.log(comment.createdAt);
+    if (typeof comment.createdAt === "number") {
+      dateAgo = (Date.now() - comment.createdAt) / 1000;
+      document.querySelector(
+        `[data-id='${comment.id}'] .comment__createdAt-info`
+      ).innerHTML = timeSince(comment.createdAt);
+    }
+    console.log(comment.createdAt);
+  }
+}
+setInterval(function () {
+  tiempo();
+}, 30000);
