@@ -48,7 +48,9 @@ function buildComments() {
     <div class="inner__comment">
       <div class="comment__top-section">
         <div class="comment__profile">
-          <img class="comment__profile-img" src="${item.user.image.png}" alt="" />  
+          <img class="comment__profile-img" src="${
+            item.user.image.png
+          }" alt="" />  
           <span class="comment__profile-name"> ${item.user.username}</span>
           ${you}
           <span class="comment__createdAt-info">${item.createdAt}</span>
@@ -56,7 +58,7 @@ function buildComments() {
        ${option}
       </div>
       <div class="comment__text">
-        ${item.content}
+        ${detectTag(item.content)}
       </div>
     </div>
     </div>
@@ -99,7 +101,9 @@ function buildComments() {
       <div class="inner__comment">
         <div class="comment__top-section">
           <div class="comment__profile">
-            <img class="comment__profile-img" src="${reply.user.image.png}" alt="" />
+            <img class="comment__profile-img" src="${
+              reply.user.image.png
+            }" alt="" />
             <span class="comment__profile-name"> ${reply.user.username}</span>
             ${you}
             <span class="comment__createdAt-info">${reply.createdAt}</span>
@@ -107,7 +111,7 @@ function buildComments() {
           ${option}
         </div>
         <div class="comment__text">
-          ${reply.content}
+          ${detectTag(reply.content)}
         </div>
       </div>
       </div>
@@ -139,7 +143,9 @@ function buildReply() {
       <div class="inner__comment">
         <div class="comment__top-section">
           <div class="comment__profile">
-          <img class="comment__profile-img" src="${reply.user.image.png}" alt="" />
+          <img class="comment__profile-img" src="${
+            reply.user.image.png
+          }" alt="" />
           <span class="comment__profile-name"> ${reply.user.username}</span>
           <span class='comment__logged-indicator'>you</span>
           <span class="comment__createdAt-info">${reply.createdAt}</span>
@@ -150,7 +156,7 @@ function buildReply() {
             </div>
         </div>
         <div class="comment__text">
-          ${reply.content}
+          ${detectTag(reply.content)}
         </div>
       </div>
       </div>
@@ -180,7 +186,9 @@ function buildComment() {
       <div class="inner__comment">
         <div class="comment__top-section">
           <div class="comment__profile">
-          <img class="comment__profile-img" src="${comment.user.image.png}" alt="" />
+          <img class="comment__profile-img" src="${
+            comment.user.image.png
+          }" alt="" />
           <span class="comment__profile-name"> ${comment.user.username}</span>
           <span class='comment__logged-indicator'>you</span>
 
@@ -192,7 +200,7 @@ function buildComment() {
             </div>
         </div>
         <div class="comment__text">
-          ${comment.content}
+          ${detectTag(comment.content)}
         </div>
       </div>
       </div>
@@ -228,9 +236,15 @@ function lastId() {
 
 function detectTag(text) {
   let inputSplit = text.split(" ");
-  if (inputSplit[0].includes("@") && inputSplit[0].trim().length > 1) {
-    html = `<span class='comment__replyingTo'>${inputSplit[0]}</span>`;
-    inputSplit[0] = html;
+  for (let i = 0; i < inputSplit.length; i++) {
+    if (inputSplit[i].includes("@")) {
+      console.log(inputSplit[i]);
+      if (inputSplit[i].includes("@") && inputSplit[0].trim().length > 0) {
+        console.log("si");
+        html = `<span class='comment__replyingTo'>${inputSplit[i]}</span>`;
+        inputSplit[i] = html;
+      }
+    }
   }
   textAnalized = inputSplit.join(" ");
   return textAnalized;
@@ -255,8 +269,11 @@ function createComment(content) {
 
 function pushComment() {
   let inputComment = document.querySelector("#sendComment").value;
-  comments.push(createComment(detectTag(inputComment)));
-  buildComment();
+  if (inputComment != "") {
+    comments.push(createComment(inputComment));
+    buildComment();
+  }
+  document.querySelector("#sendComment").blur();
 }
 
 function createReply(content) {
@@ -282,8 +299,8 @@ function textboxCommentListener() {
   let textbox = document.querySelector("#sendComment");
   let btn = document.querySelector("#commentBtn");
 
-  textbox.addEventListener("keyup", function (e) {
-    if (e.key === "Enter") {
+  textbox.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
       pushComment();
     }
   });
@@ -295,6 +312,9 @@ let idOfCommentF;
 
 function pushReply() {
   let textboxReply = document.querySelector("#textboxReply").value;
+  if (textboxReply === "") {
+    document.querySelector(".input__section").remove();
+  }
   for (coment of comments) {
     if (coment.id === idElementSelected) {
       indexOfCommentF = comments.indexOf(coment);
@@ -307,14 +327,14 @@ function pushReply() {
       }
     }
   }
-  comments[indexOfCommentF].replies.push(createReply(detectTag(textboxReply)));
+  comments[indexOfCommentF].replies.push(createReply(textboxReply));
   buildReply();
   buildDeleteBtn();
   document.querySelector(".input__section").remove();
 }
 
 function replyEnter(e) {
-  if (e.key === "Enter") {
+  if (e.key === "Enter" && !e.shiftKey) {
     pushReply();
   }
 }
@@ -344,7 +364,7 @@ function addReplyInput() {
   }
   document
     .querySelector("#textboxReply")
-    .addEventListener("keypress", replyEnter);
+    .addEventListener("keydown", replyEnter);
   document
     .querySelector("#textboxReplyBtn")
     .addEventListener("click", pushReply);
@@ -498,7 +518,7 @@ function isEditing(e) {
 
   commentText.classList.add("isEditing");
   let html = `<div class='editionWrapper'>
-  <span class="textarea" role="textbox" id="textboxEditing" contenteditable>${content}</span>
+  <textarea class="textarea" role="textbox" id="textboxEditing" contenteditable>${content}</textarea>
   <button class="primary-btn update">UPDATE</button> </div>`;
   commentText.insertAdjacentHTML("afterend", html);
   buildUpdateBtn();
@@ -518,19 +538,21 @@ function update(e) {
   let commentText = document.querySelector(
     `[data-id='${idElementSelected}'] .comment__text`
   );
+  let textbox = document.querySelector("#textboxEditing");
+
   for (comment of comments) {
     if (comment.id === elementToEditId) {
-      comment.content = document.querySelector("#textboxEditing").innerText;
+      comment.content = textbox.value;
       document.querySelector(
         `[data-id='${elementToEditId}'] .inner__comment .comment__text`
-      ).innerText = comment.content;
+      ).innerHTML = detectTag(comment.content);
     }
     for (reply of comment.replies) {
       if (reply.id === elementToEditId) {
-        reply.content = document.querySelector("#textboxEditing").innerText;
+        reply.content = textbox.value;
         document.querySelector(
           `[data-id='${elementToEditId}'] .inner__comment .comment__text`
-        ).innerText = reply.content;
+        ).innerHTML = detectTag(reply.content);
       }
     }
   }
@@ -538,8 +560,9 @@ function update(e) {
   commentText.classList.remove("isEditing");
   document.querySelector(".editionWrapper").remove();
 }
+
 function updateOnEnter(e) {
-  if (e.key === "Enter") {
+  if (e.key === "Enter" && !e.shiftKey) {
     update(e);
   }
 }
