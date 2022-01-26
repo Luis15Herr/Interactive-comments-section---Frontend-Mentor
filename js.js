@@ -2,14 +2,23 @@ fetch("data.json")
   .then((response) => response.json())
   .then((data) => {
     datos = data;
-    comments = datos.comments;
+    if (sessionStorage.getItem("comments")) {
+      let test = JSON.parse(sessionStorage.getItem("comments"));
+      comments = test;
+    } else {
+      comments = datos.comments;
+    }
     currentUser = datos.currentUser;
     ////////////////////////////////////////////
+    sortByScore();
     buildComments();
     addBtns();
     createCommentInput();
     textboxCommentListener();
+    getTimeAgo();
   });
+
+let db = sessionStorage;
 
 function buildComments() {
   let n = 0;
@@ -164,7 +173,6 @@ function buildReply() {
   document.querySelector(`[data-id='${idOfCommentF}']`).innerHTML += replies;
   addBtns();
   buildDeleteBtn();
-  console.table(comments[indexOfCommentF].replies);
 }
 
 function buildComment() {
@@ -238,9 +246,7 @@ function detectTag(text) {
   let inputSplit = text.split(" ");
   for (let i = 0; i < inputSplit.length; i++) {
     if (inputSplit[i].includes("@")) {
-      console.log(inputSplit[i]);
       if (inputSplit[i].includes("@") && inputSplit[0].trim().length > 0) {
-        console.log("si");
         html = `<span class='comment__replyingTo'>${inputSplit[i]}</span>`;
         inputSplit[i] = html;
       }
@@ -264,6 +270,7 @@ function createComment(content) {
   };
   comment.replies = [];
   document.querySelector("#sendComment").value = "";
+
   return comment;
 }
 
@@ -272,16 +279,17 @@ function pushComment() {
   if (inputComment != "") {
     comments.push(createComment(inputComment));
     buildComment();
-    tiempo();
+    getTimeAgo();
   }
   document.querySelector("#sendComment").blur();
+  db.setItem("comments", JSON.stringify(comments));
 }
 
 function createReply(content) {
   let reply = new Object();
   reply.id = lastId();
   reply.content = content;
-  reply.createdAt = "1 week ago";
+  reply.createdAt = Date.now();
   reply.score = 0;
   reply.user = {
     image: {
@@ -332,6 +340,7 @@ function pushReply() {
   buildReply();
   buildDeleteBtn();
   document.querySelector(".input__section").remove();
+  getTimeAgo();
 }
 
 function replyEnter(e) {
@@ -352,7 +361,6 @@ function addReplyInput() {
   <button class="primary-btn" id='textboxReplyBtn'>REPLY</button>
   </div>`;
 
-  console.log(idElementSelected);
   document
     .querySelector(`[data-id='${parseInt(idElementSelected)}']`)
     .insertAdjacentHTML("afterend", html);
@@ -440,7 +448,6 @@ function addBtns() {
 }
 function getIdFromElement(e) {
   idElementSelected = parseInt(e.currentTarget.parentNode.dataset.id);
-  console.log(idElementSelected);
 }
 
 function upVote() {
@@ -460,6 +467,7 @@ function upVote() {
       }
     }
   }
+  save();
 }
 
 function downVote() {
@@ -479,6 +487,7 @@ function downVote() {
       }
     }
   }
+  save();
 }
 
 //Reply trigger
@@ -621,40 +630,65 @@ function timeSince(date) {
   var interval = seconds / 31536000;
 
   if (interval > 1) {
-    return Math.floor(interval) + " years ago";
+    return Math.floor(interval) <= 1
+      ? Math.floor(interval) + " year ago"
+      : Math.floor(interval) + " years ago";
   }
   interval = seconds / 2592000;
   if (interval > 1) {
-    return Math.floor(interval) + " months ago";
+    return Math.floor(interval) <= 1
+      ? Math.floor(interval) + " month ago"
+      : Math.floor(interval) + " monts ago";
   }
   interval = seconds / 86400;
   if (interval > 1) {
-    return Math.floor(interval) + " days ago";
+    return Math.floor(interval) <= 1
+      ? Math.floor(interval) + " day ago"
+      : Math.floor(interval) + " days ago";
   }
   interval = seconds / 3600;
   if (interval > 1) {
-    return Math.floor(interval) + " hours ago";
+    return Math.floor(interval) <= 1
+      ? Math.floor(interval) + " hour ago"
+      : Math.floor(interval) + " hours ago";
   }
   interval = seconds / 60;
   if (interval > 1) {
-    return Math.floor(interval) + " minutes ago";
+    return Math.floor(interval) <= 1
+      ? Math.floor(interval) + " minute ago"
+      : Math.floor(interval) + " minutes ago";
   }
-  return /* Math.floor(seconds) + */ "a few seconds ago";
+  return /* Math.floor(seconds)  */ "a few seconds ago";
 }
 
-function tiempo() {
-  let dateAgo;
+function getTimeAgo() {
   for (comment of comments) {
-    console.log(comment.createdAt);
     if (typeof comment.createdAt === "number") {
       dateAgo = (Date.now() - comment.createdAt) / 1000;
       document.querySelector(
         `[data-id='${comment.id}'] .comment__createdAt-info`
       ).innerHTML = timeSince(comment.createdAt);
     }
-    console.log(comment.createdAt);
+    for (reply of comment.replies) {
+      if (typeof reply.createdAt === "number") {
+        dateAgo = (Date.now() - reply.createdAt) / 1000;
+        document.querySelector(
+          `[data-id='${reply.id}'] .comment__createdAt-info`
+        ).innerHTML = timeSince(reply.createdAt);
+      }
+    }
   }
 }
 setInterval(function () {
-  tiempo();
+  getTimeAgo();
 }, 30000);
+
+function sortByScore() {
+  comments.sort((item, lastitem) => {
+    return lastitem.score - item.score;
+  });
+}
+
+function save() {
+  db.setItem("comments", JSON.stringify(comments));
+}
