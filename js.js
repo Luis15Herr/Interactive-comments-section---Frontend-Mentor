@@ -59,7 +59,7 @@ function buildComments() {
         <div class="comment__profile">
           <img class="comment__profile-img" src="${
             item.user.image.png
-          }" alt="" />  
+          }" alt="User image" />  
           <span class="comment__profile-name"> ${item.user.username}</span>
           ${you}
           <span class="comment__createdAt-info">${item.createdAt}</span>
@@ -112,7 +112,7 @@ function buildComments() {
           <div class="comment__profile">
             <img class="comment__profile-img" src="${
               reply.user.image.png
-            }" alt="" />
+            }" alt="User image" />
             <span class="comment__profile-name"> ${reply.user.username}</span>
             ${you}
             <span class="comment__createdAt-info">${reply.createdAt}</span>
@@ -194,7 +194,7 @@ function buildComment() {
           <div class="comment__profile">
           <img class="comment__profile-img" src="${
             comment.user.image.png
-          }" alt="" />
+          }" alt="User image" />
           <span class="comment__profile-name"> ${comment.user.username}</span>
           <span class='comment__logged-indicator'>you</span>
 
