@@ -36,6 +36,11 @@ span[placeholder]:empty:before {
   padding-top: 65px;
   margin: auto;
   width: 730px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 
 .comments__input-container {
@@ -58,6 +63,7 @@ span[placeholder]:empty:before {
 }
 
 .comment {
+  width: 100%;
   margin-bottom: 20px;
   row-gap: 20px;
   display: -ms-grid;
@@ -278,6 +284,7 @@ span[placeholder]:empty:before {
   text-align: left;
   display: block;
   margin-right: 0;
+  width: 100%;
 }
 
 .editionWrapper button {
@@ -320,6 +327,7 @@ span[placeholder]:empty:before {
 }
 
 .textarea {
+  resize: none;
   min-width: 470px;
   min-height: 95px;
   border-radius: 5px;

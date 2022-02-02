@@ -43,6 +43,8 @@ span[placeholder]:empty:before {
   padding-top: 65px;
   margin: auto;
   width: 730px;
+  display: flex;
+  flex-wrap: wrap;
 }
 .comments__input-container {
   margin: auto;
@@ -58,6 +60,7 @@ span[placeholder]:empty:before {
   border-radius: 7px;
 }
 .comment {
+  width: 100%;
   margin-bottom: 20px;
   row-gap: 20px;
   display: grid;
@@ -219,6 +222,7 @@ span[placeholder]:empty:before {
     text-align: left;
     display: block;
     margin-right: 0;
+    width: 100%;
   }
   button {
     margin-top: 15px;
@@ -251,6 +255,7 @@ span[placeholder]:empty:before {
 }
 
 .textarea {
+  resize: none;
   min-width: 470px;
   min-height: 95px;
   border-radius: 5px;

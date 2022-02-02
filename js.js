@@ -131,7 +131,6 @@ function buildComments() {
     n++;
   });
 }
-
 function buildReply() {
   let reply = comments[indexOfCommentF].replies.at(-1);
 
@@ -174,7 +173,6 @@ function buildReply() {
   addBtns();
   buildDeleteBtn();
 }
-
 function buildComment() {
   let comment = comments.at(-1);
   html = `<div class="comment" data-id="${comment.id}">
@@ -341,6 +339,7 @@ function pushReply() {
   buildDeleteBtn();
   document.querySelector(".input__section").remove();
   getTimeAgo();
+  save();
 }
 
 function replyEnter(e) {
@@ -468,6 +467,7 @@ function upVote() {
     }
   }
   save();
+  sortByScore();
 }
 
 function downVote() {
@@ -488,6 +488,7 @@ function downVote() {
     }
   }
   save();
+  sortByScore();
 }
 
 //Reply trigger
@@ -569,6 +570,7 @@ function update(e) {
   buildDeleteBtn();
   commentText.classList.remove("isEditing");
   document.querySelector(".editionWrapper").remove();
+  save();
 }
 
 function updateOnEnter(e) {
@@ -621,6 +623,7 @@ function deleteBtn() {
       }
     }
   }
+  save();
 }
 //DELETE BTNS CREATION AND FUNCTION END
 
@@ -686,6 +689,14 @@ setInterval(function () {
 function sortByScore() {
   comments.sort((item, lastitem) => {
     return lastitem.score - item.score;
+  });
+
+  let htmlComments = document.querySelectorAll(".comment");
+  htmlComments.forEach((comment) => {
+    index = comments.findIndex((item) => {
+      return item.id === parseInt(comment.dataset.id);
+    });
+    comment.style.order = index;
   });
 }
 
