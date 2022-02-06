@@ -75,6 +75,7 @@ span[placeholder]:empty:before {
   width: 40px;
   border-radius: 12px;
   justify-self: center;
+  justify-content: space-between;
   height: 100px;
   display: flex;
   align-items: center;
@@ -87,7 +88,7 @@ span[placeholder]:empty:before {
 .comment__score-icon {
   transition: ease 0.2s;
   width: 10px;
-  height: 10px;
+  height: 15px;
   background: none;
   border: none;
   display: flex;
@@ -104,7 +105,6 @@ span[placeholder]:empty:before {
 }
 .comment__score-number {
   color: $Moderateblue;
-  margin: 20px 0;
   display: block;
   font-weight: 500;
   font-size: 0.9em;
@@ -196,7 +196,7 @@ span[placeholder]:empty:before {
   display: grid;
   position: relative;
   margin-left: 5px;
-
+  margin-bottom: 3px;
   &::before {
     content: "";
     position: absolute;
@@ -205,6 +205,9 @@ span[placeholder]:empty:before {
     top: 0;
     left: -45px;
     background-color: $Lightgray;
+  }
+  &:last-child {
+    margin-bottom: 0px;
   }
 }
 .reply__wrapper {

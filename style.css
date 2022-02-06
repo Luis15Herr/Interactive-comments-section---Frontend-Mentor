@@ -84,6 +84,9 @@ span[placeholder]:empty:before {
   width: 40px;
   border-radius: 12px;
   justify-self: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   height: 100px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -106,7 +109,7 @@ span[placeholder]:empty:before {
   -webkit-transition: ease 0.2s;
   transition: ease 0.2s;
   width: 10px;
-  height: 10px;
+  height: 15px;
   background: none;
   border: none;
   display: -webkit-box;
@@ -132,7 +135,6 @@ span[placeholder]:empty:before {
 
 .comment__score-number {
   color: #5457b6;
-  margin: 20px 0;
   display: block;
   font-weight: 500;
   font-size: 0.9em;
@@ -254,6 +256,7 @@ span[placeholder]:empty:before {
   display: grid;
   position: relative;
   margin-left: 5px;
+  margin-bottom: 3px;
 }
 
 .reply::before {
@@ -264,6 +267,10 @@ span[placeholder]:empty:before {
   top: 0;
   left: -45px;
   background-color: #eaecf1;
+}
+
+.reply:last-child {
+  margin-bottom: 0px;
 }
 
 .reply__wrapper {
