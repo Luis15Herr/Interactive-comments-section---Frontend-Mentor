@@ -356,7 +356,7 @@ function addReplyInput() {
   let html = `
   <div class="input__section input__section--reply">
   <img class='profile__img' src="${currentUser.image.png}" alt="Current User Image" />
-  <textarea class="textarea" role="textbox" id="textboxReply" contenteditable></textarea>
+  <textarea class="textarea" id="textboxReply" contenteditable></textarea>
   <button class="primary-btn" id='textboxReplyBtn'>REPLY</button>
   </div>`;
 
@@ -391,7 +391,6 @@ function createCommentInput() {
   />
   <textarea
     class="textarea"
-    role="textbox"
     id="sendComment"
     placeholder="Add a comment..."
     contenteditable
@@ -529,7 +528,7 @@ function isEditing(e) {
 
   commentText.classList.add("isEditing");
   let html = `<div class='editionWrapper'>
-  <textarea class="textarea" role="textbox" id="textboxEditing" contenteditable>${content}</textarea>
+  <textarea class="textarea" id="textboxEditing" contenteditable>${content}</textarea>
   <button class="primary-btn update">UPDATE</button> </div>`;
   commentText.insertAdjacentHTML("afterend", html);
   buildUpdateBtn();
