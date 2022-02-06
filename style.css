@@ -109,6 +109,15 @@ span[placeholder]:empty:before {
   height: 10px;
   background: none;
   border: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .comment__score-icon:hover {
@@ -220,7 +229,7 @@ span[placeholder]:empty:before {
 .comment__text {
   margin-top: 15px;
   color: #67727e;
-  font-size: 0.9em;
+  font-size: 0.899em;
   line-height: 1.47em;
   word-break: break-word;
 }
@@ -314,6 +323,7 @@ span[placeholder]:empty:before {
 
 .profile__img {
   width: 40px;
+  margin-top: 5px;
 }
 
 .input--reply {
@@ -334,7 +344,7 @@ span[placeholder]:empty:before {
   margin-right: 15px;
   border: 1px solid #eaecf1;
   padding: 15px 25px;
-  font-size: 1em;
+  font-size: 0.93em;
   font-family: "Rubik", sans-serif;
   -webkit-transition: ease 0.2s;
   transition: ease 0.2s;
