@@ -155,7 +155,7 @@ span[placeholder]:empty:before {
 }
 .delete-btn {
   margin-right: 20px;
-  color: $SoftRed;
+  color: $SoftRed !important;
 }
 
 .comment__btn {

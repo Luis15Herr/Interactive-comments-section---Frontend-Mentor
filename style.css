@@ -200,7 +200,7 @@ span[placeholder]:empty:before {
 
 .delete-btn {
   margin-right: 20px;
-  color: #ed6468;
+  color: #ed6468 !important;
 }
 
 .comment__btn {
